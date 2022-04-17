@@ -1,0 +1,89 @@
+POST http://localhost:8888/user/add
+Content-Type: application/json
+
+{
+  "email": "1",
+  "firstName": "123",
+  "lastName": "21312",
+  "password": "123123"
+}
+
+###
+
+GET http://localhost:8888/user/3
+Accept: application/json
+
+###
+
+
+
+
+POST http://localhost:8888/apartment/add
+Content-Type: application/json
+
+{
+  "price": -1,
+  "addressId": 1,
+  "ownerId": 1
+}
+###
+
+GET http://localhost:8888/apartment/8
+Accept: application/json
+
+###
+
+
+POST http://localhost:8888/address/add
+Content-Type: application/json
+
+{
+  "country": "countryy",
+  "city": "cityy",
+  "street": "str2eet",
+  "houseNumber": "2b"
+}
+
+###
+
+GET http://localhost:8888/address/4
+Accept: application/json
+
+###
+
+
+POST http://localhost:8888/address/add
+Content-Type: application/json
+
+{
+  "country": "countryy",
+  "city": "cityy",
+  "street": "str2eet",
+  "houseNumber": "2b"
+}
+
+###
+
+GET http://localhost:8888/address/4
+Accept: application/json
+
+###
+
+
+
+POST http://localhost:8888/booking/add
+Content-Type: application/json
+
+{
+  "dateStart": "2012-04-23T18:25:43.511Z",
+  "dateEnd": "2012-05-23T18:25:43.511Z",
+  "apartmentId": 1,
+  "customerId": 2
+}
+
+###
+
+GET http://localhost:8888/address/4
+Accept: application/json
+
+###
