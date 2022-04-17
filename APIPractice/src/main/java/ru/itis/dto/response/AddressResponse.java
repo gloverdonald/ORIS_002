@@ -1,6 +1,8 @@
-package ru.itis.dto;
+package ru.itis.dto.response;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Data
@@ -8,11 +10,15 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 
-public class AddressDto extends AddressResponse {
-    private Long id;
-    private String country;
-    private String city;
-    private String street;
-    private String houseNumber;
+public class AddressResponse {
 
+    private Long id;
+
+    private String country;
+
+    private String city;
+
+    private String street;
+
+    private String houseNumber;
 }

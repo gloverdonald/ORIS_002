@@ -1,9 +1,10 @@
-package ru.itis.service;
+package ru.itis.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.itis.dto.ApartmentDto;
 import ru.itis.dto.ApartmentSearchDto;
+import ru.itis.dto.request.ApartmentRequest;
+import ru.itis.dto.response.ApartmentResponse;
 import ru.itis.exceptions.AddressNotFoundException;
 import ru.itis.exceptions.ApartmentNotFoundException;
 import ru.itis.exceptions.UserNotFoundException;
@@ -15,47 +16,59 @@ import ru.itis.repository.AddressRepository;
 import ru.itis.repository.ApartmentRepository;
 import ru.itis.repository.BookingRepository;
 import ru.itis.repository.UserRepository;
+import ru.itis.service.ApartmentService;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ApartmentServiceImpl {
+public class ApartmentServiceImpl implements ApartmentService {
+
+    private final Validator validator;
+
     private final ApartmentRepository apartmentRepository;
     private final ApartmentMapper apartmentMapper;
 
     private final AddressRepository addressRepository;
+
     private final UserRepository userRepository;
+
     private final BookingRepository bookingRepository;
 
+    @Override
     public Boolean isAvailable(ApartmentSearchDto searchDto) {
-       return bookingRepository.isAvailable(searchDto.getId(), searchDto.getDateStart(), searchDto.getDateEnd());
+        Set<ConstraintViolation<ApartmentSearchDto>> violations = validator.validate(searchDto);
+        return bookingRepository.isAvailable(searchDto.getId(), searchDto.getDateStart(), searchDto.getDateEnd());
     }
 
-
-    public ApartmentDto save(ApartmentDto apartmentDto) {
+    @Override
+    public Long save(ApartmentRequest apartmentRequest) {
         AddressEntity address = addressRepository
-                .findById(apartmentDto.getAddress().getId()).orElseThrow(AddressNotFoundException::new);
+                .findById(apartmentRequest.getAddressId()).orElseThrow(AddressNotFoundException::new);
         UserEntity user = userRepository
-                .findById(apartmentDto.getOwner().getId()).orElseThrow(UserNotFoundException::new);
-        ApartmentEntity apartment = apartmentMapper.toApartment(apartmentDto);
+                .findById(apartmentRequest.getOwnerId()).orElseThrow(UserNotFoundException::new);
+
+        ApartmentEntity apartment = apartmentMapper.toApartment(apartmentRequest);
         apartment.setAddress(address);
         apartment.setOwner(user);
-        return apartmentMapper.toDto(apartmentRepository.save(apartment));
+        return apartmentRepository.save(apartment).getId();
     }
 
-    public ApartmentDto get(Long id) {
+    @Override
+    public ApartmentResponse get(Long id) {
         ApartmentEntity apartment = apartmentRepository.findById(id).orElseThrow(ApartmentNotFoundException::new);
-        return apartmentMapper.toDto(apartment);
+        return apartmentMapper.toResponse(apartment);
     }
 
-    public List<ApartmentDto> getAll() {
+    @Override
+    public List<ApartmentResponse> getAll() {
         return apartmentRepository.findAll()
                 .stream()
-                .map(apartmentMapper::toDto)
+                .map(apartmentMapper::toResponse)
                 .collect(Collectors.toList());
     }
-
-
 }

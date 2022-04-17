@@ -1,4 +1,4 @@
-package ru.itis.dto;
+package ru.itis.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,5 +10,12 @@ import lombok.experimental.SuperBuilder;
 @NoArgsConstructor
 @SuperBuilder
 public class ApartmentResponse {
+
     private Long id;
+
+    private Long price;
+
+    private Long addressId;
+
+    private Long ownerId;
 }

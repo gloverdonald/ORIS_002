@@ -2,29 +2,32 @@ package ru.itis.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.itis.dto.UserDto;
-import ru.itis.service.UserServiceImpl;
+import ru.itis.dto.request.UserRequest;
+import ru.itis.dto.response.UserResponse;
+import ru.itis.service.UserService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/user")
 public class UserController {
-    private final UserServiceImpl userServiceImpl;
+
+    private final UserService userServiceImpl;
 
     @PostMapping("/add")
-    private UserDto create(@RequestBody UserDto userDto) {
-        return userServiceImpl.save(userDto);
+    private Long create(@Valid @RequestBody UserRequest userRequest) {
+        return userServiceImpl.save(userRequest);
     }
 
     @GetMapping("/{id}")
-    private UserDto get(@PathVariable Long id) {
+    private UserResponse get(@PathVariable Long id) {
         return userServiceImpl.get(id);
     }
 
     @GetMapping("/all")
-    private List<UserDto> getAll() {
+    private List<UserResponse> getAll() {
         return userServiceImpl.getAll();
     }
 

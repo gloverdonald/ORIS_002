@@ -2,10 +2,9 @@ package ru.itis.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.itis.dto.AddressDto;
-import ru.itis.dto.BookingDto;
-import ru.itis.service.AddressServiceImpl;
-import ru.itis.service.BookingServiceImpl;
+import ru.itis.dto.request.BookingRequest;
+import ru.itis.dto.response.BookingResponse;
+import ru.itis.service.BookingService;
 
 import java.util.List;
 
@@ -13,20 +12,21 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/booking")
 public class BookingController {
-    private final BookingServiceImpl bookingService;
+
+    private final BookingService bookingService;
 
     @PostMapping("/add")
-    private BookingDto create(@RequestBody BookingDto bookingDto) {
-        return bookingService.save(bookingDto);
+    private Long create(@RequestBody BookingRequest booking) {
+        return bookingService.save(booking);
     }
 
     @GetMapping("/{id}")
-    private BookingDto get(@PathVariable Long id) {
+    private BookingResponse get(@PathVariable Long id) {
         return bookingService.get(id);
     }
 
     @GetMapping("/all")
-    private List<BookingDto> getAll() {
+    private List<BookingResponse> getAll() {
         return bookingService.getAll();
     }
 }

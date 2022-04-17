@@ -1,8 +1,9 @@
-package ru.itis.service;
+package ru.itis.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.itis.dto.BookingDto;
+import ru.itis.dto.request.BookingRequest;
+import ru.itis.dto.response.BookingResponse;
 import ru.itis.exceptions.ApartmentNotFoundException;
 import ru.itis.exceptions.BookingNotFoundException;
 import ru.itis.exceptions.UserNotFoundException;
@@ -13,41 +14,53 @@ import ru.itis.model.UserEntity;
 import ru.itis.repository.ApartmentRepository;
 import ru.itis.repository.BookingRepository;
 import ru.itis.repository.UserRepository;
+import ru.itis.service.BookingService;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class BookingServiceImpl {
+public class BookingServiceImpl implements BookingService {
+
+    private final Validator validator;
+
     private final BookingRepository bookingRepository;
     private final BookingMapper bookingMapper;
 
     private final ApartmentRepository apartmentRepository;
+
     private final UserRepository userRepository;
 
-    public BookingDto save(BookingDto bookingDto) {
+    @Override
+    public Long save(BookingRequest bookingRequest) {
+        Set<ConstraintViolation<BookingRequest>> violations = validator.validate(bookingRequest);
         ApartmentEntity apartment = apartmentRepository
-                .findById(bookingDto.getApartment().getId()).orElseThrow(ApartmentNotFoundException::new);
+                .findById(bookingRequest.getApartmentId()).orElseThrow(ApartmentNotFoundException::new);
 
         UserEntity user = userRepository
-                .findById(bookingDto.getCustomer().getId()).orElseThrow(UserNotFoundException::new);
+                .findById(bookingRequest.getCustomerId()).orElseThrow(UserNotFoundException::new);
 
-        BookingEntity booking = bookingMapper.toApartment(bookingDto);
+        BookingEntity booking = bookingMapper.toApartment(bookingRequest);
         booking.setCustomer(user);
         booking.setApartment(apartment);
-        return bookingMapper.toDto(bookingRepository.save(booking));
+        return bookingRepository.save(booking).getId();
     }
 
-    public BookingDto get(Long id) {
+    @Override
+    public BookingResponse get(Long id) {
         BookingEntity booking = bookingRepository.findById(id).orElseThrow(BookingNotFoundException::new);
-        return bookingMapper.toDto(booking);
+        return bookingMapper.toResponse(booking);
     }
 
-    public List<BookingDto> getAll() {
+    @Override
+    public List<BookingResponse> getAll() {
         return bookingRepository.findAll()
                 .stream()
-                .map(bookingMapper::toDto)
+                .map(bookingMapper::toResponse)
                 .collect(Collectors.toList());
     }
 }

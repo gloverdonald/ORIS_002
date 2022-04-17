@@ -2,25 +2,28 @@ package ru.itis.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.itis.dto.ApartmentDto;
+import ru.itis.dto.request.ApartmentRequest;
+import ru.itis.dto.response.ApartmentResponse;
 import ru.itis.dto.ApartmentSearchDto;
-import ru.itis.service.ApartmentServiceImpl;
+import ru.itis.service.ApartmentService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/apartment")
 public class ApartmentController {
-    private final ApartmentServiceImpl apartmentService;
+
+    private final ApartmentService apartmentService;
 
     @PostMapping("/add")
-    private ApartmentDto create(@RequestBody ApartmentDto apartmentDto) {
-        return apartmentService.save(apartmentDto);
+    private Long create(@Valid @RequestBody ApartmentRequest apartment) {
+        return apartmentService.save(apartment);
     }
 
     @GetMapping("/{id}")
-    private ApartmentDto get(@PathVariable Long id) {
+    private ApartmentResponse get(@PathVariable Long id) {
         return apartmentService.get(id);
     }
 
@@ -30,7 +33,7 @@ public class ApartmentController {
     }
 
     @GetMapping("/all")
-    private List<ApartmentDto> getAll() {
+    private List<ApartmentResponse> getAll() {
         return apartmentService.getAll();
     }
 }

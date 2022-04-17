@@ -2,8 +2,9 @@ package ru.itis.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.itis.dto.AddressDto;
-import ru.itis.service.AddressServiceImpl;
+import ru.itis.dto.request.AddressRequest;
+import ru.itis.dto.response.AddressResponse;
+import ru.itis.service.AddressService;
 
 import java.util.List;
 
@@ -11,20 +12,21 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/address")
 public class AddressController {
-    private final AddressServiceImpl addressService;
+
+    private final AddressService addressService;
 
     @PostMapping("/add")
-    private AddressDto create(@RequestBody AddressDto addressDto) {
-        return addressService.save(addressDto);
+    private Long create(@RequestBody AddressRequest addressRequest) {
+        return addressService.save(addressRequest);
     }
 
     @GetMapping("/{id}")
-    private AddressDto get(@PathVariable Long id) {
+    private AddressResponse get(@PathVariable Long id) {
         return addressService.get(id);
     }
 
     @GetMapping("/all")
-    private List<AddressDto> getAll() {
+    private List<AddressResponse> getAll() {
         return addressService.getAll();
     }
 }

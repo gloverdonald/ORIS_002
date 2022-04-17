@@ -20,6 +20,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -77,5 +80,11 @@ public class AppConfiguration implements WebMvcConfigurer {
         JpaTransactionManager manager = new JpaTransactionManager();
         manager.setEntityManagerFactory(entityManagerFactory);
         return manager;
+    }
+
+    @Bean
+    public Validator getHibernateValidator() {
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        return factory.getValidator();
     }
 }
