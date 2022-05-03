@@ -2,8 +2,11 @@ package ru.itis.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.itis.dto.request.UserRequest;
+import ru.itis.dto.request.LoginRequest;
+import ru.itis.dto.request.RegistrationRequest;
+import ru.itis.dto.response.TokensResponse;
 import ru.itis.dto.response.UserResponse;
+import ru.itis.service.TokenService;
 import ru.itis.service.UserService;
 
 import javax.validation.Valid;
@@ -14,21 +17,27 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
-    private final UserService userServiceImpl;
+    private final UserService userService;
+    private final TokenService tokenService;
 
-    @PostMapping("/add")
-    private Long create(@Valid @RequestBody UserRequest userRequest) {
-        return userServiceImpl.save(userRequest);
+    @PostMapping("/sign-up")
+    public Long create(@Valid @RequestBody RegistrationRequest registrationRequest) {
+        return userService.create(registrationRequest);
+    }
+
+    @PostMapping(value = "/sign-in")
+    public TokensResponse login(@RequestBody LoginRequest userRequest) {
+        return tokenService.generateTokens(userService.login(userRequest));
     }
 
     @GetMapping("/{id}")
     private UserResponse get(@PathVariable Long id) {
-        return userServiceImpl.get(id);
+        return userService.getById(id);
     }
 
     @GetMapping("/all")
     private List<UserResponse> getAll() {
-        return userServiceImpl.getAll();
+        return userService.getAll();
     }
 
 }

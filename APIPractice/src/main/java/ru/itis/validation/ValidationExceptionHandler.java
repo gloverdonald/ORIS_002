@@ -1,10 +1,12 @@
 package ru.itis.validation;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.itis.validation.http.ValidationErrorDto;
+import ru.itis.exceptions.HttpServiceException;
+import ru.itis.exceptions.ValidationErrorDto;
 import ru.itis.validation.http.ValidationExceptionResponse;
 
 import java.util.ArrayList;
@@ -29,5 +31,14 @@ public class ValidationExceptionHandler {
         return ValidationExceptionResponse.builder()
                 .errors(errors)
                 .build();
+    }
+
+    @ExceptionHandler(HttpServiceException.class)
+    public ResponseEntity<ValidationErrorDto> handleException(HttpServiceException exception) {
+        return ResponseEntity.status(exception.getHttpStatus())
+                .body(ValidationErrorDto.builder()
+                        .message(exception.getMessage())
+                        .exception(exception.getClass().getSimpleName())
+                        .build());
     }
 }

@@ -21,9 +21,7 @@ import java.util.stream.Collectors;
 public class AddressServiceImpl implements AddressService {
 
     private final Validator validator;
-
     private final AddressRepository addressRepository;
-
     private final AddressMapper addressMapper;
 
     @Override

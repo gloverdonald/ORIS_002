@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 public class ApartmentServiceImpl implements ApartmentService {
 
     private final Validator validator;
-
     private final ApartmentRepository apartmentRepository;
     private final ApartmentMapper apartmentMapper;
 

@@ -2,11 +2,11 @@ package ru.itis.model;
 
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import ru.itis.dto.enums.Role;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Data
 @Entity
@@ -32,4 +32,6 @@ public class UserEntity extends AbstractEntity {
 
     @NotBlank
     private String email;
+
+    private Role role;
 }

@@ -1,8 +1,8 @@
 package ru.itis.service;
 
+import ru.itis.dto.ApartmentSearchDto;
 import ru.itis.dto.request.ApartmentRequest;
 import ru.itis.dto.response.ApartmentResponse;
-import ru.itis.dto.ApartmentSearchDto;
 
 import java.util.List;
 

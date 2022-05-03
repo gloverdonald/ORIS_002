@@ -1,15 +1,18 @@
 package ru.itis.service;
 
-import ru.itis.dto.request.UserRequest;
+import ru.itis.dto.request.LoginRequest;
+import ru.itis.dto.request.RegistrationRequest;
 import ru.itis.dto.response.UserResponse;
 
 import java.util.List;
 
 public interface UserService {
 
-    Long save(UserRequest userRequest);
+    Long create(RegistrationRequest userRequest);
 
-    UserResponse get(Long id);
+    UserResponse login(LoginRequest loginRequest);
 
-    List<UserResponse> getAll();
+    UserResponse getById(Long id);
+
+    public List<UserResponse> getAll();
 }

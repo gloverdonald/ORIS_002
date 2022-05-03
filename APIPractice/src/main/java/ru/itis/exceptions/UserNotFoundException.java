@@ -1,9 +1,10 @@
 package ru.itis.exceptions;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import static ru.itis.exceptions.MessageConstants.USER_NOT_FOUND;
 
-@ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "User not found")
-public class UserNotFoundException extends RuntimeException {
+public class UserNotFoundException extends ModelNotFoundException {
 
+    public UserNotFoundException() {
+        super(USER_NOT_FOUND);
+    }
 }
